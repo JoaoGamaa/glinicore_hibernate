@@ -20,6 +20,7 @@
     <mapping class="model.Odontograma"/>
     <mapping class="model.Dente"/>
     <mapping class="model.Atendimento"/>
+    <mapping class="model.Agendamento"/>
     <mapping class="model.EspecialidadeOdontologica"/>
     <mapping class="model.Usuario"/>
     <mapping class="model.HistoricoAlteracao"/>

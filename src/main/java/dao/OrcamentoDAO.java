@@ -10,7 +10,7 @@ public class OrcamentoDAO extends GenericDAO {
     public List<Orcamento> listarOrdenadoPorData() throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "from Orcamento o "
                     + "order by case when o.dataConsulta is null then 1 else 0 end, "
@@ -25,7 +25,7 @@ public class OrcamentoDAO extends GenericDAO {
     public List<Orcamento> listarPorPaciente(Long pacienteId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "select distinct o from Orcamento o left join fetch o.itens where o.paciente.id = :pacienteId order by o.dataCriacao desc, o.id desc",
                     Orcamento.class)
@@ -40,7 +40,7 @@ public class OrcamentoDAO extends GenericDAO {
         if (id == null) return null;
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             List<Orcamento> lista = sessao.createQuery(
                     "select distinct o from Orcamento o left join fetch o.itens where o.id = :id",
                     Orcamento.class)

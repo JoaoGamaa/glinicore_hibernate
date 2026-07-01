@@ -27,7 +27,7 @@ public class GenericDAO {
     public <T> List<T> listar(Class<T> classe) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             sessao.beginTransaction();
             CriteriaQuery<T> consulta = sessao.getCriteriaBuilder().createQuery(classe);
             Root<T> root = consulta.from(classe);
@@ -48,7 +48,7 @@ public class GenericDAO {
     public <T> T get(Class<T> classe, Long id) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             sessao.beginTransaction();
             T obj = sessao.get(classe, id);
             sessao.getTransaction().commit();
@@ -63,10 +63,14 @@ public class GenericDAO {
         }
     }
 
+    public <T> T get(Class<T> classe, int id) throws HibernateException {
+        return get(classe, Long.valueOf(id));
+    }
+
     private void executarTransacao(OperacaoHibernate operacao) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             sessao.beginTransaction();
             operacao.executar(sessao);
             sessao.getTransaction().commit();

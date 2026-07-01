@@ -10,7 +10,7 @@ public class AnamneseDAO extends GenericDAO {
     public List<Anamnese> listarPorPaciente(Long pacienteId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "from Anamnese a where a.paciente.id = :pacienteId order by a.dataRegistro desc, a.id desc",
                     Anamnese.class)
@@ -24,7 +24,7 @@ public class AnamneseDAO extends GenericDAO {
     public Anamnese buscarUltimaPorPaciente(Long pacienteId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             List<Anamnese> lista = sessao.createQuery(
                     "from Anamnese a where a.paciente.id = :pacienteId order by a.dataRegistro desc, a.id desc",
                     Anamnese.class)

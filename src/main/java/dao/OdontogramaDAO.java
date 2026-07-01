@@ -10,7 +10,7 @@ public class OdontogramaDAO extends GenericDAO {
     public List<Odontograma> listarPorProntuario(Long prontuarioId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "select distinct o from Odontograma o left join fetch o.dentes where o.prontuario.id = :prontuarioId order by o.dataRegistro desc, o.id desc",
                     Odontograma.class)
@@ -24,7 +24,7 @@ public class OdontogramaDAO extends GenericDAO {
     public Odontograma buscarUltimoPorProntuario(Long prontuarioId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             List<Long> ids = sessao.createQuery(
                     "select o.id from Odontograma o where o.prontuario.id = :prontuarioId order by o.dataRegistro desc, o.id desc",
                     Long.class)

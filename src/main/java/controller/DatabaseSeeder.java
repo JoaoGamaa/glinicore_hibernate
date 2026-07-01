@@ -1,11 +1,14 @@
 package controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import model.Agendamento;
 import model.CondicaoDente;
 import model.ConsentimentoTratamento;
 import model.Endereco;
@@ -75,6 +78,35 @@ public final class DatabaseSeeder {
                     ortodontia, endodontia, periodontia, cirurgia);
             pacientesExistentes.put(seed.cpf, paciente);
         }
+
+        cadastrarAgendamentosExemplo(gerenciador, pacientesExistentes);
+    }
+
+    private static void cadastrarAgendamentosExemplo(GerenciadorDominio gerenciador,
+            Map<String, Paciente> pacientesExistentes) {
+        if (!gerenciador.listarSeguro(Agendamento.class).isEmpty()) {
+            return;
+        }
+
+        agendar(gerenciador, pacientesExistentes.get("11111111111"), 1, "08:00",
+                "Avaliacao odontologica", "Dr. Roberto", "Agendado");
+        agendar(gerenciador, pacientesExistentes.get("22222222222"), 1, "09:30",
+                "Limpeza", "Dra. Fernanda", "Agendado");
+        agendar(gerenciador, pacientesExistentes.get("33333333333"), 2, "14:00",
+                "Restauracao", "Dr. Roberto", "Confirmado");
+        agendar(gerenciador, pacientesExistentes.get("44444444444"), 3, "10:00",
+                "Clareamento", "Dra. Fernanda", "Agendado");
+        agendar(gerenciador, pacientesExistentes.get("55555555555"), 5, "16:00",
+                "Extracao", "Dr. Marcos", "Confirmado");
+    }
+
+    private static void agendar(GerenciadorDominio gerenciador, Paciente paciente, int dias,
+            String hora, String procedimento, String profissional, String status) {
+        if (paciente == null) {
+            return;
+        }
+        gerenciador.inserirAgendamento(paciente, LocalDate.now().plusDays(dias),
+                LocalTime.parse(hora), procedimento, profissional, status, null);
     }
 
     private static void cadastrarDadosClinicos(GerenciadorDominio gerenciador, Paciente paciente,

@@ -6,8 +6,16 @@ package viewer;
 
 import controller.GerenciadorDominio;
 import controller.GerInterGrafica;
+import controller.TableModelProximosAgendamentos;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Window;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import model.Agendamento;
 
 /**
  *
@@ -19,6 +27,7 @@ public class Panelinicio extends javax.swing.JPanel {
      * Creates new form Panelinicio
      */
     private final GerenciadorDominio gerenciador;
+    private final TableModelProximosAgendamentos modeloAgendamentos = new TableModelProximosAgendamentos();
 
     public Panelinicio() {
         this(GerInterGrafica.getInstance().getGerenciadorDominio());
@@ -27,8 +36,10 @@ public class Panelinicio extends javax.swing.JPanel {
     public Panelinicio(GerenciadorDominio gerenciador) {
         this.gerenciador = gerenciador;
         initComponents();
+        configurarTabelaAgendamentos();
         configurarAtalhos();
         atualizarResumo();
+        carregarProximosAgendamentos();
     }
 
     /**
@@ -400,9 +411,70 @@ public class Panelinicio extends javax.swing.JPanel {
         butaoNovoOdontograma1.addActionListener(novoOdontograma);
     }
 
+    private void configurarTabelaAgendamentos() {
+        jTable1.setModel(modeloAgendamentos);
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JButton btnAtualizar = new JButton("Atualizar");
+        JButton btnNovo = new JButton("Novo Agendamento");
+        JButton btnCancelar = new JButton("Cancelar Agendamento");
+        btnAtualizar.addActionListener(e -> carregarProximosAgendamentos());
+        btnNovo.addActionListener(e -> abrirNovoAgendamento());
+        btnCancelar.addActionListener(e -> cancelarAgendamentoSelecionado());
+
+        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 4));
+        botoes.add(btnAtualizar);
+        botoes.add(btnNovo);
+        botoes.add(btnCancelar);
+
+        JPanel cabecalho = new JPanel(new BorderLayout());
+        cabecalho.add(botoes, BorderLayout.NORTH);
+        cabecalho.add(jTable1.getTableHeader(), BorderLayout.SOUTH);
+        jScrollPane1.setColumnHeaderView(cabecalho);
+    }
+
+    private void carregarProximosAgendamentos() {
+        modeloAgendamentos.setLista(gerenciador.listarProximosAgendamentosSeguro());
+    }
+
+    private void abrirNovoAgendamento() {
+        Window janela = SwingUtilities.getWindowAncestor(this);
+        DlgCadAgendamento dlg = new DlgCadAgendamento(janela, gerenciador);
+        dlg.setVisible(true);
+        if (dlg.isSalvo()) {
+            atualizarResumo();
+            carregarProximosAgendamentos();
+        }
+    }
+
+    private void cancelarAgendamentoSelecionado() {
+        int linha = jTable1.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um agendamento.");
+            return;
+        }
+
+        Agendamento agendamento = modeloAgendamentos.getItem(jTable1.convertRowIndexToModel(linha));
+        int opcao = JOptionPane.showConfirmDialog(this,
+                "Cancelar o agendamento selecionado?",
+                "Cancelar Agendamento",
+                JOptionPane.YES_NO_OPTION);
+        if (opcao != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            gerenciador.cancelarAgendamento(agendamento);
+            carregarProximosAgendamentos();
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Agendamento", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void atualizarResumo() {
         int totalPacientes = gerenciador.listarPacientesSeguro().size();
-        int totalAtendimentos = gerenciador.listarSeguro(model.Atendimento.class).size();
+        int totalAtendimentos = gerenciador.listarProximosAgendamentosSeguro().size();
         jLabel3.setText(String.valueOf(totalPacientes));
         jLabel7.setText(String.valueOf(totalAtendimentos));
     }

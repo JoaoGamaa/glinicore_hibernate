@@ -10,7 +10,7 @@ public class ConsentimentoDAO extends GenericDAO {
     public List<ConsentimentoTratamento> listarOrdenadoPorData() throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "select c from ConsentimentoTratamento c join fetch c.orcamento o join fetch o.paciente order by c.dataAssinatura desc, c.id desc",
                     ConsentimentoTratamento.class)
@@ -23,7 +23,7 @@ public class ConsentimentoDAO extends GenericDAO {
     public ConsentimentoTratamento buscarPorOrcamento(Long orcamentoId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             List<ConsentimentoTratamento> lista = sessao.createQuery(
                     "select c from ConsentimentoTratamento c join fetch c.orcamento o join fetch o.paciente where o.id = :orcamentoId",
                     ConsentimentoTratamento.class)

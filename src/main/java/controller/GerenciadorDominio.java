@@ -6,6 +6,7 @@ import controller.relatorio.OdontogramaRelatorioDTO;
 import controller.relatorio.OrcamentoRelatorioDTO;
 import controller.relatorio.PacienteRelatorioDTO;
 import controller.relatorio.ProntuarioRelatorioDTO;
+import dao.AgendamentoDAO;
 import dao.AnamneseDAO;
 import dao.ConsentimentoDAO;
 import dao.GenericDAO;
@@ -15,12 +16,15 @@ import dao.PacienteDAO;
 import dao.ProntuarioDAO;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.Icon;
+import model.Agendamento;
 import model.Anamnese;
 import model.Atendimento;
 import model.CondicaoDente;
@@ -47,6 +51,7 @@ public class GerenciadorDominio {
     private final OdontogramaDAO odontogramaDAO;
     private final ProntuarioDAO prontuarioDAO;
     private final ConsentimentoDAO consentimentoDAO;
+    private final AgendamentoDAO agendamentoDAO;
     private final CepService cepService;
 
     public GerenciadorDominio() {
@@ -57,6 +62,7 @@ public class GerenciadorDominio {
         odontogramaDAO = new OdontogramaDAO();
         prontuarioDAO = new ProntuarioDAO();
         consentimentoDAO = new ConsentimentoDAO();
+        agendamentoDAO = new AgendamentoDAO();
         cepService = new CepService();
     }
 
@@ -96,6 +102,37 @@ public class GerenciadorDominio {
             System.err.println("Nao foi possivel listar pacientes: " + ex.getMessage());
             return new ArrayList<>();
         }
+    }
+
+    public List<Agendamento> listarProximosAgendamentos() throws HibernateException {
+        return agendamentoDAO.listarProximosAgendamentos();
+    }
+
+    public List<Agendamento> listarProximosAgendamentosSeguro() {
+        try {
+            return listarProximosAgendamentos();
+        } catch (Throwable ex) {
+            System.err.println("Nao foi possivel listar proximos agendamentos: " + ex.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public Agendamento inserirAgendamento(Paciente paciente, LocalDate data, LocalTime hora,
+            String procedimento, String profissional, String status, String observacoes) throws HibernateException {
+        validarAgendamento(paciente, data, hora, procedimento);
+        Agendamento agendamento = new Agendamento(paciente, data, hora,
+                vazioParaNull(procedimento), vazioParaNull(profissional),
+                textoVazio(status) ? "Agendado" : status.trim(), vazioParaNull(observacoes));
+        genDAO.inserir(agendamento);
+        return agendamento;
+    }
+
+    public void cancelarAgendamento(Agendamento agendamento) throws HibernateException {
+        if (agendamento == null) {
+            throw new IllegalArgumentException("Selecione um agendamento.");
+        }
+        agendamento.setStatus("Cancelado");
+        genDAO.salvarOuAlterar(agendamento);
     }
 
     public List<Paciente> pesquisarPacientes(String texto, int tipo) throws HibernateException {
@@ -825,6 +862,21 @@ public class GerenciadorDominio {
         }
         if (cpf != null && !FuncoesUteis.cpfBasicoValido(cpf)) {
             throw new IllegalArgumentException("CPF deve ter 11 numeros.");
+        }
+    }
+
+    private void validarAgendamento(Paciente paciente, LocalDate data, LocalTime hora, String procedimento) {
+        if (paciente == null || paciente.getId() == null) {
+            throw new IllegalArgumentException("Selecione um paciente para o agendamento.");
+        }
+        if (data == null) {
+            throw new IllegalArgumentException("Informe a data do agendamento.");
+        }
+        if (hora == null) {
+            throw new IllegalArgumentException("Informe a hora do agendamento.");
+        }
+        if (textoVazio(procedimento)) {
+            throw new IllegalArgumentException("Informe o procedimento do agendamento.");
         }
     }
 

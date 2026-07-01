@@ -14,7 +14,7 @@ public class ProntuarioDAO extends GenericDAO {
     public Prontuario buscarPorPaciente(Long pacienteId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             List<Prontuario> lista = sessao.createQuery(
                     "select p from Prontuario p join fetch p.paciente where p.paciente.id = :pacienteId",
                     Prontuario.class)
@@ -33,7 +33,7 @@ public class ProntuarioDAO extends GenericDAO {
         }
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             sessao.beginTransaction();
             Paciente gerenciado = sessao.get(Paciente.class, paciente.getId());
             if (gerenciado == null) {
@@ -61,7 +61,7 @@ public class ProntuarioDAO extends GenericDAO {
     public List<Atendimento> listarAtendimentos(Long prontuarioId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "from Atendimento a where a.prontuario.id = :prontuarioId order by a.dataAtendimento desc, a.id desc",
                     Atendimento.class)
@@ -75,7 +75,7 @@ public class ProntuarioDAO extends GenericDAO {
     public List<HistoricoAlteracao> listarHistorico(Long prontuarioId) throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery(
                     "from HistoricoAlteracao h where h.prontuario.id = :prontuarioId order by h.dataAlteracao desc, h.id desc",
                     HistoricoAlteracao.class)

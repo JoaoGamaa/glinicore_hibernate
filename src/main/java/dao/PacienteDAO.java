@@ -15,7 +15,7 @@ public class PacienteDAO extends GenericDAO {
     public List<Paciente> listarOrdenadoPorNome() throws HibernateException {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.createQuery("from Paciente p order by lower(p.nome)", Paciente.class).getResultList();
         } finally {
             if (sessao != null) sessao.close();
@@ -26,7 +26,7 @@ public class PacienteDAO extends GenericDAO {
         if (id == null) return null;
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             return sessao.get(Paciente.class, id);
         } finally {
             if (sessao != null) sessao.close();
@@ -37,7 +37,7 @@ public class PacienteDAO extends GenericDAO {
         if (cpf == null || cpf.isBlank()) return null;
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             List<Paciente> lista = sessao.createQuery("from Paciente p where p.cpf = :cpf", Paciente.class)
                     .setParameter("cpf", cpf)
                     .setMaxResults(1)
@@ -63,7 +63,7 @@ public class PacienteDAO extends GenericDAO {
     public long contarAtivos() {
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             CriteriaBuilder builder = sessao.getCriteriaBuilder();
             CriteriaQuery<Long> consulta = builder.createQuery(Long.class);
             Root<Paciente> tabela = consulta.from(Paciente.class);
@@ -78,7 +78,7 @@ public class PacienteDAO extends GenericDAO {
         List<Paciente> lista = new ArrayList<>();
         Session sessao = null;
         try {
-            sessao = ConexaoHibernate.getSessionFactory().openSession();
+            sessao = ConexaoHibernate.getSession();
             sessao.beginTransaction();
             CriteriaBuilder builder = sessao.getCriteriaBuilder();
             CriteriaQuery<Paciente> consulta = builder.createQuery(Paciente.class);
