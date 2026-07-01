@@ -1,0 +1,17 @@
+target/
+tmp/
+src/main/java/resources/
+
+*.class
+*.log
+
+.env
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+nbproject/private/
+
+.DS_Store
+Thumbs.db

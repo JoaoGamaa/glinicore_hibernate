@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="relPacientes" pageWidth="842" pageHeight="595" orientation="Landscape"
+              columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="7f52f521-cc4d-42fa-b370-90e497d81501">
+    <parameter name="SISTEMA" class="java.lang.String"/>
+    <field name="id" class="java.lang.Long"/>
+    <field name="nome" class="java.lang.String"/>
+    <field name="cpf" class="java.lang.String"/>
+    <field name="dataNascimento" class="java.lang.String"/>
+    <field name="telefone" class="java.lang.String"/>
+    <field name="email" class="java.lang.String"/>
+    <field name="cidade" class="java.lang.String"/>
+    <field name="bairro" class="java.lang.String"/>
+    <field name="status" class="java.lang.String"/>
+    <title>
+        <band height="54">
+            <staticText><reportElement x="0" y="0" width="360" height="24"/><textElement><font size="16" isBold="true"/></textElement><text><![CDATA[Relatorio de Pacientes]]></text></staticText>
+            <textField><reportElement x="0" y="28" width="360" height="18"/><textFieldExpression><![CDATA[$P{SISTEMA} + " - Emitido em " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression></textField>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="22">
+            <staticText><reportElement x="0" y="0" width="40" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[ID]]></text></staticText>
+            <staticText><reportElement x="40" y="0" width="145" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Nome]]></text></staticText>
+            <staticText><reportElement x="185" y="0" width="90" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[CPF]]></text></staticText>
+            <staticText><reportElement x="275" y="0" width="80" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Nascimento]]></text></staticText>
+            <staticText><reportElement x="355" y="0" width="95" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Telefone]]></text></staticText>
+            <staticText><reportElement x="450" y="0" width="150" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[E-mail]]></text></staticText>
+            <staticText><reportElement x="600" y="0" width="85" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Cidade]]></text></staticText>
+            <staticText><reportElement x="685" y="0" width="75" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Bairro]]></text></staticText>
+            <staticText><reportElement x="760" y="0" width="42" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Status]]></text></staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="18">
+            <textField><reportElement x="0" y="0" width="40" height="16"/><textFieldExpression><![CDATA[$F{id} == null ? "" : String.valueOf($F{id})]]></textFieldExpression></textField>
+            <textField><reportElement x="40" y="0" width="145" height="16"/><textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression></textField>
+            <textField><reportElement x="185" y="0" width="90" height="16"/><textFieldExpression><![CDATA[$F{cpf}]]></textFieldExpression></textField>
+            <textField><reportElement x="275" y="0" width="80" height="16"/><textFieldExpression><![CDATA[$F{dataNascimento}]]></textFieldExpression></textField>
+            <textField><reportElement x="355" y="0" width="95" height="16"/><textFieldExpression><![CDATA[$F{telefone}]]></textFieldExpression></textField>
+            <textField><reportElement x="450" y="0" width="150" height="16"/><textFieldExpression><![CDATA[$F{email}]]></textFieldExpression></textField>
+            <textField><reportElement x="600" y="0" width="85" height="16"/><textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression></textField>
+            <textField><reportElement x="685" y="0" width="75" height="16"/><textFieldExpression><![CDATA[$F{bairro}]]></textFieldExpression></textField>
+            <textField><reportElement x="760" y="0" width="42" height="16"/><textFieldExpression><![CDATA[$F{status}]]></textFieldExpression></textField>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="20">
+            <textField><reportElement x="700" y="0" width="100" height="18"/><textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER}]]></textFieldExpression></textField>
+        </band>
+    </pageFooter>
+</jasperReport>

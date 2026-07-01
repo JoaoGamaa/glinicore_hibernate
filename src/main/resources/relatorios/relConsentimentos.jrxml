@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="relConsentimentos" pageWidth="842" pageHeight="595" orientation="Landscape"
+              columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="f8592d88-f6e1-43d6-9f8f-29b408013940">
+    <parameter name="SISTEMA" class="java.lang.String"/>
+    <field name="id" class="java.lang.Long"/>
+    <field name="nomePaciente" class="java.lang.String"/>
+    <field name="orcamentoId" class="java.lang.Long"/>
+    <field name="data" class="java.lang.String"/>
+    <field name="termo" class="java.lang.String"/>
+    <field name="assinaturaDigital" class="java.lang.String"/>
+    <title><band height="54"><staticText><reportElement x="0" y="0" width="360" height="24"/><textElement><font size="16" isBold="true"/></textElement><text><![CDATA[Relatorio de Consentimentos]]></text></staticText><textField><reportElement x="0" y="28" width="360" height="18"/><textFieldExpression><![CDATA[$P{SISTEMA} + " - Emitido em " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression></textField></band></title>
+    <columnHeader><band height="22"><staticText><reportElement x="0" y="0" width="40" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[ID]]></text></staticText><staticText><reportElement x="40" y="0" width="170" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Paciente]]></text></staticText><staticText><reportElement x="210" y="0" width="80" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Orcamento]]></text></staticText><staticText><reportElement x="290" y="0" width="80" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Data]]></text></staticText><staticText><reportElement x="370" y="0" width="300" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Termo]]></text></staticText><staticText><reportElement x="670" y="0" width="132" height="20"/><textElement><font isBold="true"/></textElement><text><![CDATA[Assinatura]]></text></staticText></band></columnHeader>
+    <detail><band height="18"><textField><reportElement x="0" y="0" width="40" height="16"/><textFieldExpression><![CDATA[$F{id} == null ? "" : String.valueOf($F{id})]]></textFieldExpression></textField><textField><reportElement x="40" y="0" width="170" height="16"/><textFieldExpression><![CDATA[$F{nomePaciente}]]></textFieldExpression></textField><textField><reportElement x="210" y="0" width="80" height="16"/><textFieldExpression><![CDATA[$F{orcamentoId} == null ? "" : String.valueOf($F{orcamentoId})]]></textFieldExpression></textField><textField><reportElement x="290" y="0" width="80" height="16"/><textFieldExpression><![CDATA[$F{data}]]></textFieldExpression></textField><textField><reportElement x="370" y="0" width="300" height="16"/><textFieldExpression><![CDATA[$F{termo}]]></textFieldExpression></textField><textField><reportElement x="670" y="0" width="132" height="16"/><textFieldExpression><![CDATA[$F{assinaturaDigital}]]></textFieldExpression></textField></band></detail>
+    <pageFooter><band height="20"><textField><reportElement x="700" y="0" width="100" height="18"/><textFieldExpression><![CDATA["Pagina " + $V{PAGE_NUMBER}]]></textFieldExpression></textField></band></pageFooter>
+</jasperReport>
